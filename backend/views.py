@@ -17,6 +17,10 @@ from rest_framework.authentication import TokenAuthentication  # permissions
 
 from .serializer import UserSerializer
 
+# redis
+from django.views.decorators.cache import cache_page
+
+
 
 @api_view(["POST"])
 def login(request):
@@ -68,6 +72,7 @@ def register(request):
     [TokenAuthentication]
 )  # Requiere Header Authorization con 'Token <token>' - method to authenticate
 @permission_classes([IsAuthenticated])  # Authentication
+@cache_page(60 * 15)  # cache for 15 minutes
 def profile(request):
     auth_user = request.user
 
